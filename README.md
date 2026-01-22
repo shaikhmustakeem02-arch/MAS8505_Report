@@ -22,8 +22,8 @@ Which countries exhibit early or sustained disengagement patterns, and where sho
 
 The analysis uses anonymised data from a FutureLearn MOOC:
 
-Enrolment data (7 CSV files)
-Step-level activity data (7 CSV files)
+-Enrolment data (7 CSV files)
+-Step-level activity data (7 CSV files)
 
 All datasets are automatically loaded using ProjectTemplate.
 There is no manual separation into raw or cleaned data folders; all transformations are handled through scripted munging steps and cached objects.
@@ -40,6 +40,7 @@ Translation of Cycle 1 outputs into actionable insights, including country segme
 Each cycle includes Business Understanding, Data Understanding, Data Preparation, Analysis, and Evaluation stages.
 
 # Project Structure
+
 ├── data/            # Auto-loaded FutureLearn CSV files
 ├── munge/           # Data preparation and transformation scripts
 ├── cache/           # Cached intermediate objects (ProjectTemplate)
@@ -49,9 +50,9 @@ Each cycle includes Business Understanding, Data Understanding, Data Preparation
 
 # Software and Dependencies
 
-R
-ProjectTemplate
-renv
+-R
+-ProjectTemplate
+-renv
 
 All package dependencies are managed using renv to ensure consistent and reproducible execution.
 
