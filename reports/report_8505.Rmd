@@ -1,0 +1,18 @@
+---
+title: "report_8505"
+author: "Mustakeem Sadik Shaikh"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = normalizePath(".."))
+```
+
+```{r, include=FALSE}
+library(ProjectTemplate)
+load.project()
+```
+
+
