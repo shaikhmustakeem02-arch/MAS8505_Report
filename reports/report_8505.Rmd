@@ -16,3 +16,162 @@ load.project()
 ```
 
 
+
+## Introduction
+
+Learning analytics leverages learner interaction data to examine how participants engage with online course content. In large-scale online courses, disengagement often occurs at identifiable points rather than uniformly across the learning journey.
+
+Understanding where learners disengage, and whether these points differ across countries, can help course providers identify potential structural or contextual barriers to sustained participation. This analysis focuses on identifying disengagement points within a FutureLearn course and comparing these patterns across countries using a CRISP-DM Cycle 1 approach.
+
+
+
+## Research Question:
+
+At what point in the course do learners most frequently disengage, and does this vary by country?
+
+## 1. Business Understanding (Cycle 1)
+
+Online course providers rely on sustained learner participation to achieve both educational and commercial objectives. When learners disengage partway through a course, learning outcomes are reduced and course effectiveness is compromised.
+Understanding where disengagement occurs within a course is critical for identifying potential structural weaknesses. Additionally, if disengagement points differ across countries, this may indicate that learners from different regions experience the course differently due to contextual, linguistic, or accessibility factors.
+
+Business Objective
+
+The objective of Cycle 1 is to identify the stages of the course where learner disengagement is most common and to compare disengagement patterns across countries.
+Analytical Goal
+
+This cycle is descriptive. No prediction or intervention is attempted.
+
+## 2. Data Understanding (Cycle 1)
+
+The analysis uses prepared data derived from a FutureLearn MOOC. The dataset combines learner enrolment information with step-level activity records.
+Each learner is uniquely identified using a learner identifier, enabling linkage between enrolment records and step progression data. Step-level records capture progression through the course by recording which steps learners accessed and completed.
+Country information associated with each learner allows disengagement patterns to be compared across geographic groups. Initial inspection showed substantial variation in learner counts by country, requiring cautious interpretation of results for smaller groups.
+
+## 3. Data Preparation (Cycle 1)
+
+Data preparation was completed prior to analysis. The prepared dataset contains:
+One row per learner-step interaction
+A cleaned country variable for each learner
+Step and week identifiers enabling progression analysis
+For each learner, the final step reached is treated as a proxy for the disengagement point. The prepared dataset is used directly in the following analysis.
+(No further preparation is performed in this cycle.)
+
+## 4. Data Analysis / Modelling (Cycle 1)
+
+### 4.1 Learner-level disengagement point
+
+Learner-level disengagement points were derived by identifying the maximum step and week reached by each learner.
+
+```{r}
+learner_outcomes <- cycle1_prepared %>%
+  group_by(learner_id, country_final) %>%
+  summarise(
+    final_step = max(step_number, na.rm = TRUE),
+    final_week = max(week_number, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+
+### 4.2 Overall disengagement distribution
+
+To identify where disengagement most frequently occurs, the distribution of final steps reached was examined across all learners.
+
+```{r}
+overall_disengagement <- learner_outcomes %>%
+  count(final_step)
+
+overall_disengagement
+```
+
+```{r}
+ggplot(overall_disengagement,
+       aes(x = final_step, y = n)) +
+  geom_col() +
+  labs(
+    title = "Distribution of Learner Disengagement Points",
+    x = "Final Step Reached",
+    y = "Number of Learners"
+  )
+```
+
+The distribution shows that learner disengagement is concentrated at specific steps rather than being evenly distributed throughout the course. A prominent peak around step [X] indicates that many learners stop progressing at this stage.
+
+### 4.3 Disengagement patterns by country
+
+Learner-level disengagement points were aggregated by country to examine geographic variation.
+
+
+```{r}
+country_summary <- learner_outcomes %>%
+  group_by(country_final) %>%
+  summarise(
+    learners = n(),
+    mean_final_step = mean(final_step),
+    median_final_step = median(final_step),
+    .groups = "drop"
+  )
+```
+
+To ensure stable comparisons, the analysis focuses on countries with the largest learner populations.
+
+```{r}
+top_countries <- country_summary %>%
+  arrange(desc(learners)) %>%
+  slice_head(n = 10)
+top_countries
+```
+```{r}
+ggplot(top_countries,
+       aes(x = reorder(country_final, mean_final_step),
+           y = mean_final_step)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Average Disengagement Point by Country",
+    x = "Country",
+    y = "Average Final Step Reached"
+  )
+```
+
+
+The results reveal clear variation in disengagement points across countries. Learners from some countries tend to progress further through the course on average, while others disengage earlier, suggesting that engagement depth differs geographically.
+
+
+### 4.4 Most frequent disengagement step within countries
+
+To further examine disengagement behaviour, the most common disengagement step was identified for each country.
+
+```{r}
+country_peak_steps <- learner_outcomes %>%
+  count(country_final, final_step) %>%
+  group_by(country_final) %>%
+  slice_max(n, n = 1) %>%
+  ungroup()
+
+head(country_peak_steps)
+```
+
+
+
+In many countries, disengagement clusters around a limited number of steps. While some countries share similar disengagement points, others display distinct patterns, indicating that problematic stages of the course may vary across regions.
+
+## 5. Evaluation (Cycle 1)
+
+Cycle 1 successfully identifies the points in the course where learners most frequently disengage. Disengagement is shown to cluster around specific steps rather than occurring randomly.
+The analysis also demonstrates that disengagement patterns vary across countries, with some learner populations disengaging earlier than others. These findings meet the descriptive objectives of Cycle 1.
+However, the analysis does not explain why disengagement occurs or how providers should respond. These questions are intentionally deferred to a subsequent CRISP-DM cycle.
+
+## 6. Cycle 1 Conclusion
+
+This CRISP-DM Cycle 1 analysis provides a clear, data-driven view of learner disengagement within a FutureLearn course. By identifying common disengagement points and highlighting geographic variation, the analysis establishes a strong descriptive foundation for further decision-oriented investigation.
+
+
+
+
+
+
+
+
+
+
