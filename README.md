@@ -1,39 +1,92 @@
-# MAS8505_Report
+# MAS8505 Coursework – Learner Disengagement Analysis Using MOOC Data
 
-Welcome to ProjectTemplate!
+This repository contains the coursework submission for the MAS8505 module.
+The project analyses learner engagement and disengagement patterns in a FutureLearn MOOC, focusing on how disengagement varies across countries and how these insights can support targeted educational interventions.
 
-This file introduces you to ProjectTemplate, but you should eventually replace
-the contents of this file with an introduction to your project. People who
-work with your data in the future will thank you for it, including your future
-self.
+## Project Overview
 
-ProjectTemplate is an R package that helps you organize your statistical
-analysis projects. Since you're reading this file, we'll assume that you've
-already called `create.project()` to set up this project and all of its
-contents.
+The analysis examines learner progression through course steps by combining enrolment information with step-level activity data. A two-cycle CRISP-DM framework is used to move from descriptive analysis to decision-oriented recommendations.
+The project prioritises interpretability, reproducibility, and stakeholder relevance rather than predictive modelling.
 
-To load your new project, you'll first need to `setwd()` into the directory
-where this README file is located. Then you need to run the following two
-lines of R code:
+## Research Questions
 
-	library('ProjectTemplate')
-	load.project()
+## Cycle 1 – Descriptive Analysis
 
-After you enter the second line of code, you'll see a series of automated
-messages as ProjectTemplate goes about doing its work. This work involves:
-* Reading in the global configuration file contained in `config`.
-* Loading any R packages you listed in the configuration file.
-* Reading in any datasets stored in `data` or `cache`.
-* Preprocessing your data using the files in the `munge` directory.
+At what point in the course do learners most frequently disengage, and does this vary by country?
 
-Once that's done, you can execute any code you'd like. For every analysis
-you create, we'd recommend putting a separate file in the `src` directory.
-If the files start with the two lines mentioned above:
+## Cycle 2 – Decision-Oriented Analysis
 
-	library('ProjectTemplate')
-	load.project()
+Which countries exhibit early or sustained disengagement patterns, and where should targeted offline or blended learning interventions be prioritised?
 
-You'll have access to all of your data, already fully preprocessed, and
-all of the libraries you want to use.
+# Data Description
 
-For more details about ProjectTemplate, see http://projecttemplate.net
+The analysis uses anonymised data from a FutureLearn MOOC:
+
+Enrolment data (7 CSV files)
+Step-level activity data (7 CSV files)
+
+All datasets are automatically loaded using ProjectTemplate.
+There is no manual separation into raw or cleaned data folders; all transformations are handled through scripted munging steps and cached objects.
+
+# Analytical Framework
+
+The project follows the CRISP-DM methodology implemented across two iterative cycles:
+
+Cycle 1:
+Identification of learner disengagement points and comparison of disengagement behaviour across countries.
+
+Cycle 2:
+Translation of Cycle 1 outputs into actionable insights, including country segmentation and identification of critical disengagement stages to support intervention planning.
+Each cycle includes Business Understanding, Data Understanding, Data Preparation, Analysis, and Evaluation stages.
+
+# Project Structure
+├── data/            # Auto-loaded FutureLearn CSV files
+├── munge/           # Data preparation and transformation scripts
+├── cache/           # Cached intermediate objects (ProjectTemplate)
+├── reports/         # R Markdown analysis report
+├── MAS8505_Report.Rproj
+└── README.md
+
+# Software and Dependencies
+
+R
+ProjectTemplate
+renv
+
+All package dependencies are managed using renv to ensure consistent and reproducible execution.
+
+# How to Run the Project
+
+Open the project using the MAS8505_Report.Rproj file.
+In the R console, run:
+library(ProjectTemplate)
+load.project()
+Open the R Markdown file located in the reports/ directory.
+Click Knit to generate the final report.
+
+# Reproducibility and Best Practices
+
+All data preparation steps are scripted in the munge/ directory.
+Intermediate results are cached using ProjectTemplate to improve efficiency.
+Analysis code and narrative are integrated using R Markdown.
+Version control supports traceability of analytical changes.
+These practices ensure the analysis is transparent, reproducible, and auditable.
+
+# Coursework Context
+
+This project is submitted as part of the MAS8505 module coursework.
+The analysis emphasises structured reasoning, methodological clarity, and business-oriented interpretation aligned with academic assessment requirements.
+
+# Limitations
+
+Learner engagement is inferred from step completion and may not capture all forms of learning behaviour.
+Country-level aggregation may obscure variation within individual countries.
+The analysis is descriptive and does not establish causal relationships.
+
+# Future Work
+
+Potential extensions include:
+Incorporating temporal engagement patterns
+Analysing learner characteristics where available
+Evaluating engagement changes following targeted interventions
+
